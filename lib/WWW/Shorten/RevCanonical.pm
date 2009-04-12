@@ -2,7 +2,7 @@ package WWW::Shorten::RevCanonical;
 
 use strict;
 use 5.008_001;
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use base qw( WWW::Shorten::generic Exporter );
 our @EXPORT = qw( makeashorterlink makealongerlink );
@@ -68,6 +68,20 @@ WWW::Shorten::RevCanonical - Shorten URL using rev="canonical"
 
   my $short_url = makeashorterlink($long_url); # Note that this could fail and return undef
 
+  # Or, use WWW::Shorten::Simple wrapper
+  use WWW::Shorten::Simple;
+
+  my @shorteners = (
+      WWW::Shorten::Simple->new('RevCanonical'), # Try this first
+      WWW::Shorten::Simple->new('TinyURL'),      # Then fallback to TinyURL
+  );
+
+  my $short_url;
+  for my $shortener (@shorteners) {
+      $short_url = $shortener->shorten($long_url)
+          and last;
+  }
+
 =head1 DESCRIPTION
 
 WWW::Shorten::RevCanonical is a WWW::Shorten plugin to extract
@@ -89,6 +103,6 @@ it under the same terms as Perl itself.
 
 =head1 SEE ALSO
 
-L<WWW::Shorten>, L<http://revcanonical.wordpress.com/>
+L<WWW::Shorten>, L<WWW::Shoten::Simple>, L<http://revcanonical.wordpress.com/>
 
 =cut
